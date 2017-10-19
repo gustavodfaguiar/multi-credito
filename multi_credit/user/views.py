@@ -22,4 +22,4 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'New user created!'})
+    return jsonify({'message': 'New user created!'}), 201
