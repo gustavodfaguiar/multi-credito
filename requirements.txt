@@ -1,11 +1,18 @@
+cffi==1.11.2
 click==6.7
 Flask==0.12.2
 Flask-SQLAlchemy==2.3.2
+idna==2.6
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
+-e git+https://github.com/gusttavoaguiarr/multi-credito.git@e84ecd98a778fa392292bb50810654b865f66259#egg=multi_credit
 pkg-resources==0.0.0
 py==1.4.34
+pyasn1==0.3.7
+pycparser==2.18
+PyJWT==1.5.3
 pytest==3.2.3
+six==1.11.0
 SQLAlchemy==1.1.14
 Werkzeug==0.12.2
