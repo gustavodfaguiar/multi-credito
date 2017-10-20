@@ -33,6 +33,16 @@ class UserModelsTestCase(unittest.TestCase):
             "password": "123456"
         }
 
+        self.wallet_return = {
+            "wallet": {
+                "credit": 0,
+                "id": 1,
+                "max_limit": 0,
+                "user_id": 1,
+                "user_limit": 0
+            }
+        }
+
         with self.app.app_context():
             db.create_all()
 
@@ -77,3 +87,18 @@ class UserModelsTestCase(unittest.TestCase):
         self.assertEqual(
             result['message'], "Wallet already exists!")
         self.assertEqual(response.status_code, 200)
+
+    def test_get_wallet(self):
+        response_login = self.client.get(
+            '/api/v1/login',
+            data=json.dumps(self.user_login),
+            headers=self.headers)
+        auth_token = json.loads(response_login.data.decode())
+        self.headers['x-access-token'] = auth_token['token']
+
+        response_wallet = self.client.get(
+            '/api/v1/wallet',
+            headers=self.headers)
+        response_message = json.loads(response_wallet.data.decode())
+        self.assertEqual(response_message, self.wallet_return)
+        self.assertEqual(response_wallet.status_code, 201)
