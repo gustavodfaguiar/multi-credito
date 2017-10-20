@@ -7,6 +7,15 @@ from multi_credit.security import token_required
 wallet = Blueprint('wallet', __name__)
 
 
+# GET /wallet
+@wallet.route('/v1/wallet', methods=['GET'])
+@token_required
+def get_wallet(current_user):
+    wallet = Wallet.query.filter_by(user_id=current_user.id).first()
+
+    return jsonify({'wallet': wallet.serialize}), 201
+
+
 # POST /wallet
 @wallet.route("/v1/wallet", methods=['POST'])
 @token_required
