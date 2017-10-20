@@ -8,6 +8,7 @@ import jwt
 class UserModelsTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app
+        self.app.config.from_object('multi_credit.config.TestingConfig')
         self.client = self.app.test_client()
         self.headers = {
             'content-type': 'application/json',
@@ -19,7 +20,6 @@ class UserModelsTestCase(unittest.TestCase):
             "email": "gustavo@gmail.com",
             "password": "123456"
         }
-
         self.user_login = {
             "username": "gustavo@gmail.com",
             "password": "123456"
@@ -37,6 +37,16 @@ class UserModelsTestCase(unittest.TestCase):
         self.assertEqual(
             result['message'], "New user created!")
         self.assertEqual(response.status_code, 201)
+
+    def test_registered_with_already_registered_user(self):
+        response = self.client.post(
+            '/api/v1/user',
+            data=json.dumps(self.user_data),
+            headers=self.headers)
+        result = json.loads(response.data.decode())
+        self.assertEqual(
+            result['message'], "User already exists!")
+        self.assertEqual(response.status_code, 200)
 
     def test_login_user(self):
         response = self.client.get(
