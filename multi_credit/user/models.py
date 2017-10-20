@@ -4,6 +4,7 @@ from multi_credit.db import db
 class User(db.Model):
 
     __tablename__ = 'user'
+    __table_args__ = (db.UniqueConstraint("email"),)
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(240), nullable=False)
