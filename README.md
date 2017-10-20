@@ -2,6 +2,11 @@
 
 ## Development
 
+### Run application
+```
+make run
+```
+
 ### Run tests
 ```
 make test
