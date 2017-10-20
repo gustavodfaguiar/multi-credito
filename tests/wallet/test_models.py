@@ -1,8 +1,6 @@
-from multi_credit.wallet.models import Wallet
 from multi_credit import app, db
 import unittest
 import json
-import jwt
 
 
 class UserModelsTestCase(unittest.TestCase):
