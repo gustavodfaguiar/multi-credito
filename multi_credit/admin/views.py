@@ -26,13 +26,12 @@ def login_api():
             {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
     if check_password_hash(user.password, auth.password):
-        print('teste')
         token = jwt.encode({
             'user_id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)},
             os.environ.get('SECRET_KEY', 'secreta'))
 
-        return jsonify({'token': token.decode('UTF-8')})
+        return jsonify({'token': token.decode('UTF-8')}), 201
 
     return make_response(
         'Could not verify', 401,
