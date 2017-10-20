@@ -23,6 +23,6 @@ def create_wallet(current_user):
         db.session.add(new_wallet)
         db.session.commit()
     except:
-        return jsonify({'message': 'Wallet already exists!'})
+        return jsonify({'message': 'Wallet already exists!'}), 200
 
-    return jsonify({'message': 'New wallet created!'})
+    return jsonify({'message': 'New wallet created!'}), 201
