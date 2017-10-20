@@ -17,7 +17,7 @@ def get_one_user(current_user, user_id):
     if not user:
         return jsonify({'message': 'No user found!'})
 
-    return jsonify({'user': user.serialize})
+    return jsonify({'user': user.serialize}), 201
 
 
 # POST /user data: {name, email, password}
