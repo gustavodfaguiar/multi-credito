@@ -19,3 +19,9 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'DATABASE_URL',
         'sqlite:///multi_credit.db')
+
+
+class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    DEBUG = True
+    TESTING = True
