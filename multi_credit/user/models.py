@@ -23,3 +23,15 @@ class User(db.Model):
             'name': self.name,
             'email': self.email
         }
+
+    @property
+    def name_card(self):
+        middle_name = ''
+        name = self.name.split(' ')
+        first_name, last_name = name[0], name[-1]
+        for position in range(1, len(name) - 1):
+            middle_name += name[position][0] + ' '
+
+        full_name = first_name + ' ' + middle_name + last_name
+
+        return full_name.upper()
