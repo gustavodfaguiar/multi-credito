@@ -32,7 +32,10 @@ def create_user():
                     email=request_data['email'],
                     password=hashed_password)
 
-    db.session.add(new_user)
-    db.session.commit()
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+    except:
+        return jsonify({'message': 'User already exists!'}), 200
 
     return jsonify({'message': 'New user created!'}), 201
