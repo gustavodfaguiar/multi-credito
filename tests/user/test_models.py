@@ -1,8 +1,6 @@
-from multi_credit.user.models import User
 from multi_credit import app, db
 import unittest
 import json
-import jwt
 
 
 class UserModelsTestCase(unittest.TestCase):
@@ -14,18 +12,25 @@ class UserModelsTestCase(unittest.TestCase):
             'content-type': 'application/json',
             'authorization': 'Basic Z3VzdGF2b0BnbWFpbC5jb206MTIzNDU2',
             'x-access-token': ''
-            }
+        }
+
         self.user_data = {
             "name": "Gustavo Dirceu Faria Aguiar",
             "email": "gustavo@gmail.com",
             "password": "123456"
         }
+
         self.user_login = {
             "username": "gustavo@gmail.com",
             "password": "123456"
         }
 
         with self.app.app_context():
+            db.create_all()
+
+    def tearDown(self):
+        with self.app.app_context():
+            db.drop_all()
             db.create_all()
 
     def test_create_user(self):
@@ -39,16 +44,27 @@ class UserModelsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_registered_with_already_registered_user(self):
+        self.client.post(
+            '/api/v1/user',
+            data=json.dumps(self.user_data),
+            headers=self.headers)
+
         response = self.client.post(
             '/api/v1/user',
             data=json.dumps(self.user_data),
             headers=self.headers)
         result = json.loads(response.data.decode())
+
         self.assertEqual(
             result['message'], "User already exists!")
         self.assertEqual(response.status_code, 200)
 
     def test_login_user(self):
+        self.client.post(
+            '/api/v1/user',
+            data=json.dumps(self.user_data),
+            headers=self.headers)
+ 
         response = self.client.get(
             '/api/v1/login',
             data=json.dumps(self.user_login),
@@ -56,6 +72,11 @@ class UserModelsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_get_one_user(self):
+        self.client.post(
+            '/api/v1/user',
+            data=json.dumps(self.user_data),
+            headers=self.headers)
+
         response_login = self.client.get(
             '/api/v1/login',
             data=json.dumps(self.user_login),
