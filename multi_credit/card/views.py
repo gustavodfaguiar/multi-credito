@@ -16,6 +16,9 @@ card = Blueprint('card', __name__)
 def create_card(current_user):
     wallet = Wallet.query.filter_by(user_id=current_user.id).first()
 
+    if not wallet:
+        return jsonify({'message': 'No card found!'})
+
     request_data = request.get_json()
     format_expiration_date = datetime.strptime(
         request_data['expiration_date'].replace("-", ""), "%Y%m%d").date()
