@@ -70,3 +70,18 @@ def create_card(current_user):
         return jsonify({'message': 'Card already exists!'}), 200
 
     return jsonify({'message': 'New card created!'}), 201
+
+
+# DELETE /card/<int:card_id>
+@card.route('/v1/card/<int:card_id>', methods=['DELETE'])
+@token_required
+def delete_card(current_user, card_id):
+    wallet = Wallet.query.filter_by(user_id=current_user.id).first()
+    card = Card.query.filter_by(wallet_id=wallet.id, id=card_id).first()
+
+    if not card:
+        return jsonify({'message': 'No card found!'})
+
+    db.session.delete(card)
+    db.session.commit()
+    return jsonify({'message': 'The card has been deleted!'})
