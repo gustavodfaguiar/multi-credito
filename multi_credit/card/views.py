@@ -84,4 +84,4 @@ def delete_card(current_user, card_id):
 
     db.session.delete(card)
     db.session.commit()
-    return jsonify({'message': 'The card has been deleted!'})
+    return jsonify({'message': 'The card has been deleted!'}), 200

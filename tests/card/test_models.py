@@ -119,3 +119,54 @@ class CardModelsTestCase(unittest.TestCase):
         response_message = json.loads(response_card.data.decode())
         self.assertGreater(len(response_message['cards']), 0)
         self.assertEqual(response_card.status_code, 201)
+
+    def test_delete_card(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        self.client.post(
+            '/api/v1/wallet',
+            data=json.dumps(self.wallet_data),
+            headers=headers)
+
+        self.client.post(
+            '/api/v1/card',
+            data=json.dumps(self.card_data),
+            headers=headers)
+
+        response = self.client.delete(
+            '/api/v1/card/1',
+            headers=headers)
+
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(
+            result['message'], "The card has been deleted!")
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_the_card_does_not_exist(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        self.client.post(
+            '/api/v1/wallet',
+            data=json.dumps(self.wallet_data),
+            headers=headers)
+
+        response = self.client.delete(
+            '/api/v1/card/1',
+            headers=headers)
+
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(
+            result['message'], "No card found!")
+        self.assertEqual(response.status_code, 200)
