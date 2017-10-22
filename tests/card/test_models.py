@@ -9,13 +9,27 @@ class CardModelsTestCase(unittest.TestCase):
         self.app = app
         self.app.config.from_object('multi_credit.config.TestingConfig')
         self.client = self.app.test_client()
-
+        
         self.card_data = {
             "number": 5165834017829286,
             "expiration_date": "2018-07-5",
             "validity_date": "2018-07-5",
             "cvv": 408,
             "limit": 2000
+        }
+
+        self.card_return = {
+            "card": {
+                "credit": 2000,
+                "cvv": "408",
+                "expiration_date": "Thu, 05 Jul 2018 00:00:00 GMT",
+                "id": 1,
+                "limit": 2000,
+                "name": "GUSTAVO D F AGUIAR",
+                "number": 5165834017829286,
+                "validity_date": "Thu, 05 Jul 2018 00:00:00 GMT",
+                "wallet_id": 1
+            }
         }
 
         self.wallet_data = {
@@ -55,3 +69,28 @@ class CardModelsTestCase(unittest.TestCase):
         self.assertEqual(
             result['message'], "New card created!")
         self.assertEqual(response.status_code, 201)
+
+    def test_get_one_card(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        self.client.post(
+            '/api/v1/wallet',
+            data=json.dumps(self.wallet_data),
+            headers=headers)
+
+        self.client.post(
+            '/api/v1/card',
+            data=json.dumps(self.card_data),
+            headers=headers)
+
+        response_card = self.client.get(
+            '/api/v1/card/1',
+            headers=headers)
+        response_message = json.loads(response_card.data.decode())
+        self.assertEqual(response_message, self.card_return)
+        self.assertEqual(response_card.status_code, 201)

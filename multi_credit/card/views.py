@@ -17,9 +17,9 @@ def get_cards(current_user):
     cards = [card.serialize for card in Card.query.filter_by(
             wallet_id=wallet.id)]
     if not cards:
-        return jsonify({'mensagem': 'No registration card!'})
+        return jsonify({'mensagem': 'No registration card!'}), 200
 
-    return jsonify({'cards': cards})
+    return jsonify({'cards': cards}), 201
 
 
 # GET /card/<int:card_id>
@@ -30,9 +30,9 @@ def get_one_card(current_user, card_id):
     card = Card.query.filter_by(wallet_id=wallet.id, id=card_id).first()
 
     if not card:
-        return jsonify({'message': 'No card found!'})
+        return jsonify({'message': 'No card found!'}), 200
 
-    return jsonify({'card': card.serialize})
+    return jsonify({'card': card.serialize}), 201
 
 
 # POST /card data: {number, expiration_date, validity_date,
