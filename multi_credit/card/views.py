@@ -9,6 +9,19 @@ from datetime import datetime
 card = Blueprint('card', __name__)
 
 
+# GET /cards
+@card.route('/v1/cards', methods=['GET'])
+@token_required
+def get_cards(current_user):
+    wallet = Wallet.query.filter_by(user_id=current_user.id).first()
+    cards = [card.serialize for card in Card.query.filter_by(
+            wallet_id=wallet.id)]
+    if not cards:
+        return jsonify({'mensagem': 'No registration card!'})
+
+    return jsonify({'cards': cards})
+
+
 # POST /card data: {number, expiration_date, validity_date,
 #            name, cvv, limit, credit, wallet_id}
 @card.route("/v1/card", methods=['POST'])
