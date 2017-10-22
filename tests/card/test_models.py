@@ -1,6 +1,7 @@
 from multi_credit import app, db
 import unittest
 import json
+from tests.helpers import TestHelper
 
 
 class CardModelsTestCase(unittest.TestCase):
@@ -8,22 +9,6 @@ class CardModelsTestCase(unittest.TestCase):
         self.app = app
         self.app.config.from_object('multi_credit.config.TestingConfig')
         self.client = self.app.test_client()
-        self.headers = {
-            'content-type': 'application/json',
-            'authorization': 'Basic Z3VzdGF2b0BnbWFpbC5jb206MTIzNDU2',
-            'x-access-token': ''
-        }
-
-        self.user_data = {
-            "name": "Gustavo Dirceu Faria Aguiar",
-            "email": "gustavo@gmail.com",
-            "password": "123456"
-        }
-
-        self.user_login = {
-            "username": "gustavo@gmail.com",
-            "password": "123456"
-        }
 
         self.card_data = {
             "number": 5165834017829286,
@@ -49,27 +34,22 @@ class CardModelsTestCase(unittest.TestCase):
             db.create_all()
 
     def test_create_card(self):
-        self.client.post(
-            '/api/v1/user',
-            data=json.dumps(self.user_data),
-            headers=self.headers)
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
 
-        response_login = self.client.get(
-            '/api/v1/login',
-            data=json.dumps(self.user_login),
-            headers=self.headers)
-        auth_token = json.loads(response_login.data.decode())
-        self.headers['x-access-token'] = auth_token['token']
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
 
         self.client.post(
             '/api/v1/wallet',
             data=json.dumps(self.wallet_data),
-            headers=self.headers)
+            headers=headers)
 
         response = self.client.post(
             '/api/v1/card',
             data=json.dumps(self.card_data),
-            headers=self.headers)
+            headers=headers)
         result = json.loads(response.data.decode())
 
         self.assertEqual(
