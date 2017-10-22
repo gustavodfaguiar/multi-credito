@@ -22,6 +22,19 @@ def get_cards(current_user):
     return jsonify({'cards': cards})
 
 
+# GET /card/<int:card_id>
+@card.route('/v1/card/<int:card_id>', methods=['GET'])
+@token_required
+def get_one_card(current_user, card_id):
+    wallet = Wallet.query.filter_by(user_id=current_user.id).first()
+    card = Card.query.filter_by(wallet_id=wallet.id, id=card_id).first()
+
+    if not card:
+        return jsonify({'message': 'No card found!'})
+
+    return jsonify({'card': card.serialize})
+
+
 # POST /card data: {number, expiration_date, validity_date,
 #            name, cvv, limit, credit, wallet_id}
 @card.route("/v1/card", methods=['POST'])
