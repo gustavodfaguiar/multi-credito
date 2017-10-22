@@ -1,6 +1,7 @@
 from multi_credit import app, db
 import unittest
 import json
+from tests.helpers import create_user, sign_in
 
 
 class UserModelsTestCase(unittest.TestCase):
@@ -34,25 +35,15 @@ class UserModelsTestCase(unittest.TestCase):
             db.create_all()
 
     def test_create_user(self):
-        response = self.client.post(
-            '/api/v1/user',
-            data=json.dumps(self.user_data),
-            headers=self.headers)
+        response = create_user(self)
         result = json.loads(response.data.decode())
         self.assertEqual(
             result['message'], "New user created!")
         self.assertEqual(response.status_code, 201)
 
     def test_registered_with_already_registered_user(self):
-        self.client.post(
-            '/api/v1/user',
-            data=json.dumps(self.user_data),
-            headers=self.headers)
-
-        response = self.client.post(
-            '/api/v1/user',
-            data=json.dumps(self.user_data),
-            headers=self.headers)
+        create_user(self)
+        response = create_user(self)
         result = json.loads(response.data.decode())
 
         self.assertEqual(
@@ -60,32 +51,18 @@ class UserModelsTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_login_user(self):
-        self.client.post(
-            '/api/v1/user',
-            data=json.dumps(self.user_data),
-            headers=self.headers)
- 
-        response = self.client.get(
-            '/api/v1/login',
-            data=json.dumps(self.user_login),
-            headers=self.headers)
+        create_user(self)
+        response = sign_in(self)
         self.assertEqual(response.status_code, 201)
 
     def test_get_one_user(self):
-        self.client.post(
-            '/api/v1/user',
-            data=json.dumps(self.user_data),
-            headers=self.headers)
-
-        response_login = self.client.get(
-            '/api/v1/login',
-            data=json.dumps(self.user_login),
-            headers=self.headers)
-        auth_token = json.loads(response_login.data.decode())
+        create_user(self)
+        response_sign_in = sign_in(self)
+        auth_token = json.loads(response_sign_in.data.decode())
         self.headers['x-access-token'] = auth_token['token']
 
-        response_user = self.client.get(
+        response_get_user = self.client.get(
             '/api/v1/user/1',
             headers=self.headers)
 
-        self.assertEqual(response_user.status_code, 201)
+        self.assertEqual(response_get_user.status_code, 201)
