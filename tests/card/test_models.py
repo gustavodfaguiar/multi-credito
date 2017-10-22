@@ -9,7 +9,7 @@ class CardModelsTestCase(unittest.TestCase):
         self.app = app
         self.app.config.from_object('multi_credit.config.TestingConfig')
         self.client = self.app.test_client()
-        
+
         self.card_data = {
             "number": 5165834017829286,
             "expiration_date": "2018-07-5",
@@ -93,4 +93,29 @@ class CardModelsTestCase(unittest.TestCase):
             headers=headers)
         response_message = json.loads(response_card.data.decode())
         self.assertEqual(response_message, self.card_return)
+        self.assertEqual(response_card.status_code, 201)
+
+    def test_get_cards(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        self.client.post(
+            '/api/v1/wallet',
+            data=json.dumps(self.wallet_data),
+            headers=headers)
+
+        self.client.post(
+            '/api/v1/card',
+            data=json.dumps(self.card_data),
+            headers=headers)
+
+        response_card = self.client.get(
+            '/api/v1/cards',
+            headers=headers)
+        response_message = json.loads(response_card.data.decode())
+        self.assertGreater(len(response_message['cards']), 0)
         self.assertEqual(response_card.status_code, 201)
