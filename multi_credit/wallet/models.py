@@ -32,6 +32,9 @@ class Wallet(db.Model):
             user_id=user_id
         )
 
-        db.session.add(new_wallet)
-        db.session.commit()
-        return True
+        try:
+            db.session.add(new_wallet)
+            db.session.commit()
+            return True
+        except:
+            return False
