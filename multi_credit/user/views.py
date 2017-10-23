@@ -1,6 +1,7 @@
 from multi_credit.db import db
 from flask import request, jsonify, Blueprint
 from multi_credit.user.models import User
+from multi_credit.wallet.models import Wallet
 from werkzeug.security import generate_password_hash
 from multi_credit.security import token_required
 
@@ -34,8 +35,10 @@ def create_user():
 
     try:
         db.session.add(new_user)
-        db.session.commit()
+        db.session.flush()
     except:
         return jsonify({'message': 'User already exists!'}), 200
+
+    Wallet().create_wallet(new_user.id)
 
     return jsonify({'message': 'New user created!'}), 201
