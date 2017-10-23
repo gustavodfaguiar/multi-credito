@@ -23,3 +23,15 @@ class Wallet(db.Model):
             'credit': self.credit,
             'user_id': self.user_id
         }
+
+    def create_wallet(self, user_id):
+        new_wallet = Wallet(
+            max_limit=0,
+            user_limit=0,
+            credit=0,
+            user_id=user_id
+        )
+
+        db.session.add(new_wallet)
+        db.session.commit()
+        return True
