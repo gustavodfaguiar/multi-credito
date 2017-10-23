@@ -35,48 +35,6 @@ class WalletModelsTestCase(unittest.TestCase):
             db.drop_all()
             db.create_all()
 
-    def test_create_wallet(self):
-        TestHelper().create_user(self.client)
-        response_sign_in = TestHelper().sign_in(self.client)
-        auth_token = json.loads(response_sign_in.data.decode())
-
-        headers = TestHelper().headers
-        headers['x-access-token'] = auth_token['token']
-
-        response = self.client.post(
-            '/api/v1/wallet',
-            data=json.dumps(self.wallet_data),
-            headers=headers)
-        result = json.loads(response.data.decode())
-
-        self.assertEqual(
-            result['message'], "New wallet created!")
-        self.assertEqual(response.status_code, 201)
-
-    def test_registered_with_already_registered_wallet(self):
-
-        TestHelper().create_user(self.client)
-        response_sign_in = TestHelper().sign_in(self.client)
-        auth_token = json.loads(response_sign_in.data.decode())
-
-        headers = TestHelper().headers
-        headers['x-access-token'] = auth_token['token']
-
-        self.client.post(
-            '/api/v1/wallet',
-            data=json.dumps(self.wallet_data),
-            headers=headers)
-
-        response = self.client.post(
-            '/api/v1/wallet',
-            data=json.dumps(self.wallet_data),
-            headers=headers)
-        result = json.loads(response.data.decode())
-
-        self.assertEqual(
-            result['message'], "Wallet already exists!")
-        self.assertEqual(response.status_code, 200)
-
     def test_get_wallet(self):
         TestHelper().create_user(self.client)
         response_sign_in = TestHelper().sign_in(self.client)
@@ -84,11 +42,6 @@ class WalletModelsTestCase(unittest.TestCase):
 
         headers = TestHelper().headers
         headers['x-access-token'] = auth_token['token']
-
-        self.client.post(
-            '/api/v1/wallet',
-            data=json.dumps(self.wallet_data),
-            headers=headers)
 
         response_wallet = self.client.get(
             '/api/v1/wallet',
