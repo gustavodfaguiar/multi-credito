@@ -3,7 +3,7 @@ from flask import request, jsonify, Blueprint
 from multi_credit.card.models import Card
 from multi_credit.wallet.models import Wallet
 from multi_credit.security import token_required
-from datetime import datetime
+from datetime import date, datetime
 
 
 card = Blueprint('card', __name__)
@@ -85,3 +85,25 @@ def delete_card(current_user, card_id):
     db.session.delete(card)
     db.session.commit()
     return jsonify({'message': 'The card has been deleted!'}), 200
+
+
+# DELETE /card/pay/<int:card_id>
+@card.route('/v1/card/pay/<int:card_id>', methods=['PUT'])
+@token_required
+def pay_card(current_user, card_id):
+    wallet = Wallet.query.filter_by(user_id=current_user.id).first()
+    card = Card.query.filter_by(wallet_id=wallet.id, id=card_id).first()
+
+    if not card:
+        return jsonify({'message': 'No card found!'})
+
+    request_data = request.get_json()
+
+    today = date.today()
+    date_validate = datetime.strptime(card.validity_date, "%Y%m%d").date()
+
+    card.credit = card.pay_card(
+        request_data['value_pay'], today, date_validate)
+    db.session.commit()
+
+    return jsonify({'message': 'paid successfully'}), 200
