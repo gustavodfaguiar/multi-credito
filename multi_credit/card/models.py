@@ -4,6 +4,7 @@ from multi_credit import db
 class Card(db.Model):
 
     __tablename__ = 'card'
+    __table_args__ = (db.UniqueConstraint("number"),)
 
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.Integer)
@@ -30,3 +31,21 @@ class Card(db.Model):
             'credit': self.credit,
             'wallet_id': self.wallet_id
         }
+
+    def pay_card(self, value_pay, today, date_validate):
+        difference = abs((today - date_validate).days)
+
+        if difference > 0:
+            result = self.pay_with_tax(value_pay)
+        else:
+            result = self.pay_without_tax(value_pay)
+
+        return result
+
+    def pay_with_tax(self, value_pay):
+        debtor_value = (self.credit + value_pay)
+        interest = value_pay * 0.10
+        return debtor_value + interest
+
+    def pay_without_tax(self, value_pay):
+        return self.credit + value_pay
