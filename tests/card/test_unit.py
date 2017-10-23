@@ -3,7 +3,7 @@ from multi_credit.card.models import Card
 from datetime import datetime
 
 
-class CardModelsTestCase(unittest.TestCase):
+class CardUnitModelsTestCase(unittest.TestCase):
     def setUp(self):
 
         self.card_data = {
