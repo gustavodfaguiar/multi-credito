@@ -42,9 +42,6 @@ def get_one_card(current_user, card_id):
 def create_card(current_user):
     wallet = Wallet.query.filter_by(user_id=current_user.id).first()
 
-    if not wallet:
-        return jsonify({'message': 'No card found!'})
-
     request_data = request.get_json()
     format_expiration_date = datetime.strptime(
         request_data['expiration_date'].replace("-", ""), "%Y%m%d").date()
@@ -68,6 +65,9 @@ def create_card(current_user):
         db.session.commit()
     except:
         return jsonify({'message': 'Card already exists!'}), 200
+
+    wallet.max_limit = new_card.sum_cards(wallet.id)
+    db.session.commit()
 
     return jsonify({'message': 'New card created!'}), 201
 

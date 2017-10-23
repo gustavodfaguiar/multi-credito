@@ -49,3 +49,7 @@ class Card(db.Model):
 
     def pay_without_tax(self, value_pay):
         return self.credit + value_pay
+
+    def sum_cards(self, wallet_id):
+        cards = self.query.filter_by(wallet_id=wallet_id)
+        return sum(card.limit for card in cards)
