@@ -33,7 +33,6 @@ class WalletModelsTestCase(unittest.TestCase):
     def tearDown(self):
         with self.app.app_context():
             db.drop_all()
-            db.create_all()
 
     def test_get_wallet(self):
         TestHelper().create_user(self.client)
@@ -49,3 +48,73 @@ class WalletModelsTestCase(unittest.TestCase):
         response_message = json.loads(response_wallet.data.decode())
         self.assertEqual(response_message, self.wallet_return)
         self.assertEqual(response_wallet.status_code, 201)
+
+    def test_update_limit_wallet(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        with open('tests/wallet/cards.txt', 'r') as data_file:
+            json_data = data_file.read()
+            cards = json.loads(json_data)
+            for card in cards:
+                self.client.post(
+                    '/api/v1/card',
+                    data=json.dumps({
+                        "number": cards[card]['number'],
+                        "expiration_date": "2018-07-5",
+                        "validity_date": cards[card]['validity_date'],
+                        "cvv": cards[card]['cvv'],
+                        "limit": cards[card]['limit'],
+                        "wallet_id": 1
+                    }),
+                    headers=headers)
+
+        response_wallet = self.client.put(
+            '/api/v1/wallet',
+            data=json.dumps({
+                "user_limit": 10000
+            }),
+            headers=headers)
+        response_message = json.loads(response_wallet.data.decode())
+        self.assertEqual(
+            response_message['message'], "Updated limit wallet!")
+        self.assertEqual(response_wallet.status_code, 201)
+
+    def test_update_limit_above_allowed_wallet(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        with open('tests/wallet/cards.txt', 'r') as data_file:
+            json_data = data_file.read()
+            cards = json.loads(json_data)
+            for card in cards:
+                self.client.post(
+                    '/api/v1/card',
+                    data=json.dumps({
+                        "number": cards[card]['number'],
+                        "expiration_date": "2018-07-5",
+                        "validity_date": cards[card]['validity_date'],
+                        "cvv": cards[card]['cvv'],
+                        "limit": cards[card]['limit'],
+                        "wallet_id": 1
+                    }),
+                    headers=headers)
+
+        response_wallet = self.client.put(
+            '/api/v1/wallet',
+            data=json.dumps({
+                "user_limit": 13000
+            }),
+            headers=headers)
+        response_message = json.loads(response_wallet.data.decode())
+        self.assertEqual(
+            response_message['message'], "Passed the limit!")
+        self.assertEqual(response_wallet.status_code, 200)
