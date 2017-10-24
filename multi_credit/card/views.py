@@ -14,7 +14,8 @@ card = Blueprint('card', __name__)
 @token_required
 def get_cards(current_user):
     wallet = Wallet.query.filter_by(user_id=current_user.id).first()
-    cards = [card.serialize for card in Card.query.filter_by(
+    cards = [card.serialize for card in Card.query.order_by(
+            Card.validity_date.asc(), Card.limit.asc()).filter_by(
             wallet_id=wallet.id)]
     if not cards:
         return jsonify({'mensagem': 'No registration card!'}), 200
