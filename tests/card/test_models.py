@@ -13,7 +13,7 @@ class CardModelsTestCase(unittest.TestCase):
         self.card_data = {
             "number": 5165834017829286,
             "expiration_date": "2018-07-5",
-            "validity_date": "2018-07-5",
+            "validity_date": 5,
             "cvv": 408,
             "limit": 2000
         }
@@ -27,7 +27,7 @@ class CardModelsTestCase(unittest.TestCase):
                 "limit": 2000,
                 "name": "GUSTAVO D F AGUIAR",
                 "number": 5165834017829286,
-                "validity_date": "Thu, 05 Jul 2018 00:00:00 GMT",
+                "validity_date": 5,
                 "wallet_id": 1
             }
         }
