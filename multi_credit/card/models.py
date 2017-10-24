@@ -9,7 +9,7 @@ class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.Integer)
     expiration_date = db.Column(db.Date)
-    validity_date = db.Column(db.Date)
+    validity_date = db.Column(db.Integer)
     name = db.Column(db.String(30), nullable=False)
     cvv = db.Column(db.String(4), nullable=False)
     limit = db.Column(db.Float(), nullable=False)
@@ -33,9 +33,7 @@ class Card(db.Model):
         }
 
     def pay_card(self, value_pay, today, date_validate):
-        difference = abs((today - date_validate).days)
-
-        if difference > 0:
+        if today.day > date_validate:
             result = self.pay_with_tax(value_pay)
         else:
             result = self.pay_without_tax(value_pay)
