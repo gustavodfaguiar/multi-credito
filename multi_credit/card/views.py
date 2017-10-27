@@ -47,10 +47,13 @@ def create_card(current_user):
     format_expiration_date = datetime.strptime(
         request_data['expiration_date'].replace("-", ""), "%Y%m%d").date()
 
+    format_validity_date = datetime.strptime(
+        request_data['validity_date'].replace("-", ""), "%Y%m%d").date()
+
     new_card = Card(
         number=request_data['number'],
         expiration_date=format_expiration_date,
-        validity_date=request_data['validity_date'],
+        validity_date=format_validity_date,
         name=current_user.name_card,
         cvv=request_data['cvv'],
         limit=request_data['limit'],

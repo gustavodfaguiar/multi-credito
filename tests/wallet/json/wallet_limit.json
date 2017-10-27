@@ -6,7 +6,7 @@
         "limit": 1000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 51658340178292826,
-        "validity_date": 5,
+        "validity_date": "2017-05-5",
         "wallet_id": 1
     },
     "card_2" : {
@@ -16,7 +16,7 @@
         "limit": 2000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 5165834017829286,
-        "validity_date": 5,
+        "validity_date": "2017-05-5",
         "wallet_id": 1
     },
     "card_3" : {
@@ -26,7 +26,7 @@
         "limit": 3000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 516583401782923826,
-        "validity_date": 5,
+        "validity_date": "2017-05-5",
         "wallet_id": 1
     },
     "card_4" : {
@@ -36,7 +36,7 @@
         "limit": 1000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 516583411782923846,
-        "validity_date": 10,
+        "validity_date": "2017-05-10",
         "wallet_id": 1
     },
     "card_5" : {
@@ -46,7 +46,7 @@
         "limit": 3000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 516583401782923846,
-        "validity_date": 10,
+        "validity_date": "2017-05-10",
         "wallet_id": 1
     },
     "card_6" : {
@@ -56,7 +56,7 @@
         "limit": 1000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 516583411782923896,
-        "validity_date": 15,
+        "validity_date": "2017-05-15",
         "wallet_id": 1
     },
     "card_8" : {
@@ -66,7 +66,7 @@
         "limit": 1000,
         "name": "GUSTAVO D F AGUIAR",
         "number": 516583411782923816,
-        "validity_date": 20,
+        "validity_date": "2017-05-20",
         "wallet_id": 1
     }
 }

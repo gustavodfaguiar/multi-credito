@@ -57,9 +57,8 @@ class WalletModelsTestCase(unittest.TestCase):
         headers = TestHelper().headers
         headers['x-access-token'] = auth_token['token']
 
-        with open('tests/wallet/cards.txt', 'r') as data_file:
-            json_data = data_file.read()
-            cards = json.loads(json_data)
+        with open('tests/wallet/json/wallet_limit.json') as data_file:
+            cards = json.load(data_file)
             for card in cards:
                 self.client.post(
                     '/api/v1/card',
@@ -92,9 +91,8 @@ class WalletModelsTestCase(unittest.TestCase):
         headers = TestHelper().headers
         headers['x-access-token'] = auth_token['token']
 
-        with open('tests/wallet/cards.txt', 'r') as data_file:
-            json_data = data_file.read()
-            cards = json.loads(json_data)
+        with open('tests/wallet/json/wallet_limit.json') as data_file:
+            cards = json.load(data_file)
             for card in cards:
                 self.client.post(
                     '/api/v1/card',
@@ -118,3 +116,87 @@ class WalletModelsTestCase(unittest.TestCase):
         self.assertEqual(
             response_message['message'], "Passed the limit!")
         self.assertEqual(response_wallet.status_code, 200)
+
+    def test_makes_purchase_with_a_card(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        with open('tests/wallet/json/cards.json') as data_file:
+            cards = json.load(data_file)
+            for card in cards:
+                self.client.post(
+                    '/api/v1/card',
+                    data=json.dumps({
+                        "number": cards[card]['number'],
+                        "expiration_date": "2018-07-5",
+                        "validity_date": cards[card]['validity_date'],
+                        "cvv": cards[card]['cvv'],
+                        "limit": cards[card]['limit'],
+                        "wallet_id": 1
+                    }),
+                    headers=headers)
+
+        response_buy = self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 3000,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+        response_message = json.loads(response_buy.data.decode())
+
+        self.assertEqual(response_message['message']['credit'], 0.0)
+        self.assertEqual(response_message['message']['number'],
+            cards['card_4']['number'])
+        self.assertEqual(response_buy.status_code, 201)
+
+
+    def test_makes_purchase_with_several_cards(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        with open('tests/wallet/json/cards.json') as data_file:
+            cards = json.load(data_file)
+            for card in cards:
+                self.client.post(
+                    '/api/v1/card',
+                    data=json.dumps({
+                        "number": cards[card]['number'],
+                        "expiration_date": "2018-07-5",
+                        "validity_date": cards[card]['validity_date'],
+                        "cvv": cards[card]['cvv'],
+                        "limit": cards[card]['limit'],
+                        "wallet_id": 1
+                    }),
+                    headers=headers)
+
+        response_buy = self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 4000,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+        response_message = json.loads(response_buy.data.decode())
+
+        asert_equal = [
+            {
+                'credit': 0.0,
+                'number': cards['card_4']['number']
+            },
+            {
+                'credit': 1000.0,
+                'number': cards['card_3']['number']
+            }
+        ]
+
+        self.assertEqual(response_message['message'], asert_equal)
+        self.assertEqual(response_buy.status_code, 201)

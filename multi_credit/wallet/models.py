@@ -11,7 +11,7 @@ class Wallet(db.Model):
     user_limit = db.Column(db.Float(), nullable=False)
     credit = db.Column(db.Float(), nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship("User")
 
     @property
@@ -38,3 +38,8 @@ class Wallet(db.Model):
             return True
         except:
             return False
+
+    def buy(self):
+        cards = [card.serialize for card in Card.query.order_by(
+                Card.validity_date.asc(), Card.limit.asc()).filter_by(
+                wallet_id=wallet.id)]

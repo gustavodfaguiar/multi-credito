@@ -1,7 +1,6 @@
 from multi_credit import app, db
 import unittest
 from multi_credit.wallet.models import Wallet
-from multi_credit.user.models import User
 
 
 class WalletUnitModelsTestCase(unittest.TestCase):
@@ -12,6 +11,10 @@ class WalletUnitModelsTestCase(unittest.TestCase):
 
         with self.app.app_context():
             db.create_all()
+
+    def tearDown(self):
+        with self.app.app_context():
+            db.drop_all()
 
     def test_create_wallet(self):
         with self.app.app_context():

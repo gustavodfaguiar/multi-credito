@@ -7,8 +7,6 @@ idna==2.6
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
--e git+https://github.com/gusttavoaguiarr/multi-credito.git@c6266edc782028f5570ac914f0430063e29c4c09#egg=multi_credit
-pkg-resources==0.0.0
 py==1.4.34
 pyasn1==0.3.7
 pycparser==2.18

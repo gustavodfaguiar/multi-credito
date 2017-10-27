@@ -1,0 +1,62 @@
+{
+    "card_1": {
+        "credit": 1000,
+        "cvv": "408",
+        "expiration_date": "2017-05-3",
+        "limit": 1000,
+        "name": "GUSTAVO D F AGUIAR",
+        "number": 51658340178292826,
+        "validity_date": "2017-05-5",
+        "wallet_id": 1
+    },
+    "card_2" : {
+        "credit": 2000,
+        "cvv": "408",
+        "expiration_date": "2017-05-3",
+        "limit": 2000,
+        "name": "GUSTAVO D F AGUIAR",
+        "number": 5165834017829286,
+        "validity_date": "2017-05-10",
+        "wallet_id": 1
+    },
+    "card_3" : {
+        "credit": 2000,
+        "cvv": "408",
+        "expiration_date": "2017-05-3",
+        "limit": 2000,
+        "name": "GUSTAVO D F AGUIAR",
+        "number": 516583401782923826,
+        "validity_date": "2017-05-15",
+        "wallet_id": 1
+    },
+    "card_4" : {
+        "credit": 3000,
+        "cvv": "408",
+        "expiration_date": "2017-05-3",
+        "limit": 3000,
+        "name": "GUSTAVO D F AGUIAR",
+        "number": 516583401782423826,
+        "validity_date": "2017-05-20",
+        "wallet_id": 1
+    },
+    "card_5" : {
+        "credit": 3000,
+        "cvv": "408",
+        "expiration_date": "2017-05-3",
+        "limit": 3000,
+        "name": "GUSTAVO D F AGUIAR",
+        "number": 516583401482423826,
+        "validity_date": "2017-05-25",
+        "wallet_id": 1
+    },
+    "card_6" : {
+        "credit": 3000,
+        "cvv": "408",
+        "expiration_date": "2017-05-3",
+        "limit": 3000,
+        "name": "GUSTAVO D F AGUIAR",
+        "number": 516583401722423826,
+        "validity_date": "2017-05-30",
+        "wallet_id": 1
+    }
+}

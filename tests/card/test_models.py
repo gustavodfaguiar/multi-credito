@@ -13,7 +13,7 @@ class CardModelsTestCase(unittest.TestCase):
         self.card_data = {
             "number": 5165834017829286,
             "expiration_date": "2018-07-5",
-            "validity_date": 5,
+            "validity_date": "2017-07-5",
             "cvv": 408,
             "limit": 2000
         }
@@ -27,7 +27,7 @@ class CardModelsTestCase(unittest.TestCase):
                 "limit": 2000,
                 "name": "GUSTAVO D F AGUIAR",
                 "number": 5165834017829286,
-                "validity_date": 5,
+                "validity_date": "Wed, 05 Jul 2017 00:00:00 GMT",
                 "wallet_id": 1
             }
         }
@@ -45,7 +45,6 @@ class CardModelsTestCase(unittest.TestCase):
     def tearDown(self):
         with self.app.app_context():
             db.drop_all()
-            db.create_all()
 
     def test_create_card(self):
         TestHelper().create_user(self.client)
@@ -54,11 +53,6 @@ class CardModelsTestCase(unittest.TestCase):
 
         headers = TestHelper().headers
         headers['x-access-token'] = auth_token['token']
-
-        self.client.post(
-            '/api/v1/wallet',
-            data=json.dumps(self.wallet_data),
-            headers=headers)
 
         response = self.client.post(
             '/api/v1/card',
@@ -69,6 +63,7 @@ class CardModelsTestCase(unittest.TestCase):
         self.assertEqual(
             result['message'], "New card created!")
         self.assertEqual(response.status_code, 201)
+
 
     def test_get_one_card(self):
         TestHelper().create_user(self.client)
@@ -102,11 +97,6 @@ class CardModelsTestCase(unittest.TestCase):
 
         headers = TestHelper().headers
         headers['x-access-token'] = auth_token['token']
-
-        self.client.post(
-            '/api/v1/wallet',
-            data=json.dumps(self.wallet_data),
-            headers=headers)
 
         self.client.post(
             '/api/v1/card',
