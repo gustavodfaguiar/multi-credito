@@ -9,11 +9,6 @@ from multi_credit.security import token_required
 user = Blueprint('user', __name__)
 
 
-@user.route('/', methods=['GET'])
-def test():
-    return "teste"
-
-
 # GET /user/<int:user_id>
 @user.route('/v1/user/<int:user_id>', methods=['GET'])
 @token_required
