@@ -11,6 +11,9 @@ app = Flask(__name__)
 app.config.from_object(
     os.environ.get('APP_SETTINGS', 'multi_credit.config.DevelopmentConfig'))
 
+with app.app_context():
+    db.init_app(app)
+
 app.register_blueprint(wallet, url_prefix='/api')
 app.register_blueprint(user, url_prefix='/api')
 app.register_blueprint(card, url_prefix='/api')
