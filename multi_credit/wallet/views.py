@@ -45,10 +45,9 @@ def buy_wallet(current_user):
         user_id=current_user.id).first()
 
     if wallet.user_limit > 0:
-        available_credit = wallet.user_limit - wallet.spent_credit
+        available_credit = abs(wallet.user_limit - wallet.spent_credit)
     else:
-        available_credit = wallet.max_limit - wallet.spent_credit
-
+        available_credit = abs(wallet.max_limit - wallet.spent_credit)
 
     if value > available_credit:
         return jsonify({'message': 'The user has no credit to make this purchase!'}), 422
@@ -83,23 +82,18 @@ def buy_wallet(current_user):
             card_update.credit = card_update.credit - card['credit']
 
         try:
-            db.session.commit()
             list_card_buy.append({
                 'credit': card_update.credit,
                 'number': card_update.number
             })
+            db.session.commit()
         except:
             return jsonify({'message': 'Error when buying'})
 
         if sum_total >= value:
             break
 
-    if wallet.user_limit > 0:
-        wallet.spent_credit = abs((wallet.spent_credit + value) - wallet.user_limit)
-    else:
-        wallet.spent_credit = abs((wallet.spent_credit + value) - wallet.max_limit)
+    wallet.spent_credit = abs(wallet.spent_credit + value)
     db.session.commit()
-    print(list_card_buy)
-    print('-----------------------------------')
-    print(wallet.serialize)
+
     return jsonify({'message': list_card_buy}), 201
