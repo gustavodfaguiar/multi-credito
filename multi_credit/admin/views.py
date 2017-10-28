@@ -4,6 +4,8 @@ from werkzeug.security import check_password_hash
 import jwt
 import datetime
 import os
+from decouple import config
+
 
 login = Blueprint('login', __name__)
 
@@ -29,7 +31,7 @@ def login_api():
         token = jwt.encode({
             'user_id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)},
-            os.environ.get('SECRET_KEY', 'secreta'))
+            config('SECRET_KEY'))
 
         return jsonify({'token': token.decode('UTF-8')}), 201
 
