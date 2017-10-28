@@ -35,20 +35,7 @@ class Card(db.Model):
             'wallet_id': self.wallet_id
         }
 
-    def pay_card(self, value_pay, today, date_validate):
-        if today.day > date_validate.day:
-            result = self.pay_with_tax(value_pay)
-        else:
-            result = self.pay_without_tax(value_pay)
-
-        return result
-
-    def pay_with_tax(self, value_pay):
-        debtor_value = (self.credit + value_pay)
-        interest = value_pay * 0.10
-        return debtor_value + interest
-
-    def pay_without_tax(self, value_pay):
+    def pay_card(self, value_pay):
         return self.credit + value_pay
 
     def sum_cards(self, wallet_id):
