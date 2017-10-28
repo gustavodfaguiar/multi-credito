@@ -92,7 +92,7 @@ def delete_card(current_user, card_id):
     return jsonify({'message': 'The card has been deleted!'}), 200
 
 
-# DELETE /card/pay/<int:card_id>
+# PUT /card/pay/<int:card_id>
 @card.route('/v1/card/pay/<int:card_id>', methods=['PUT'])
 @token_required
 def pay_card(current_user, card_id):
@@ -104,11 +104,10 @@ def pay_card(current_user, card_id):
 
     request_data = request.get_json()
 
-    today = date.today()
-    date_validate = datetime.strptime(card.validity_date, "%Y%m%d").date()
+    card.credit = card.pay_card(request_data['value_pay'])
+    db.session.commit()
 
-    card.credit = card.pay_card(
-        request_data['value_pay'], today, date_validate)
+    wallet.spent_credit = wallet.spent_credit - request_data['value_pay']
     db.session.commit()
 
     return jsonify({'message': 'paid successfully'}), 200
