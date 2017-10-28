@@ -6,3 +6,4 @@ multi_credit.egg-info/
 .cache/
 .coverage
 *.pyc
+.env

@@ -1,27 +1,23 @@
-import os
-basedir = os.path.abspath(os.path.dirname(__file__))
+from decouple import config
 
 
 class Config(object):
-    DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'secreta')
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL',
-        'postgres://postgres@127.0.0.1/db')
+    DEBUG = config('DEBUG', default=False, cast=bool)
+    SECRET_KEY = config('SECRET_KEY')
+    DEFAULT_DATABASE = 'sqlite:///multi_credit.db'
+    SQLALCHEMY_DATABASE_URI = config('DATABASE_URL', default=DEFAULT_DATABASE)
 
 
 class ProductionConfig(Config):
-    DEBUG = False
+    DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'DATABASE_URL',
-        'sqlite:///multi_credit.db')
+    DEBUG = config('DEBUG', default=False, cast=bool)
+    SQLALCHEMY_DATABASE_URI = config('DATABASE_URL')
 
 
 class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    DEBUG = True
+    DEBUG = config('DEBUG', default=False, cast=bool)
     TESTING = True

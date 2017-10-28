@@ -1,8 +1,8 @@
-import os
 from functools import wraps
 from flask import request, jsonify
 import jwt
 from multi_credit.user.models import User
+from decouple import config
 
 
 def token_required(f):
@@ -17,7 +17,7 @@ def token_required(f):
             return jsonify({'message': 'Token is missing!'}), 401
 
         try:
-            data = jwt.decode(token, os.environ.get('SECRET_KEY', 'secreta'))
+            data = jwt.decode(token, config('SECRET_KEY'))
             current_user = User.query.filter_by(id=data['user_id']).first()
         except:
             return jsonify({'message': 'Token is invalid!'}), 401
