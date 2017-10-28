@@ -45,6 +45,11 @@ def buy_wallet(current_user):
     wallet = Wallet.query.filter_by(
         user_id=current_user.id).first()
 
+    if wallet.user_limit > 0 and value > wallet.user_limit:
+        return jsonify({'message': 'Purchase value greater than the limit reported by the user!'}), 422
+    elif value > wallet.max_limit:
+        return jsonify({'message': 'Purchase value greater than the limit!'}), 422
+
     cards = []
     days = 10
     date_buy = datetime.datetime.strptime(date_now, '%Y-%m-%d').date()

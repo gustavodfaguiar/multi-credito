@@ -49,7 +49,7 @@ class WalletModelsTestCase(unittest.TestCase):
         self.assertEqual(response_message, self.wallet_return)
         self.assertEqual(response_wallet.status_code, 201)
 
-    def test_update_limit_wallet(self):
+    def test_user_update_limit_wallet(self):
         TestHelper().create_user(self.client)
         response_sign_in = TestHelper().sign_in(self.client)
         auth_token = json.loads(response_sign_in.data.decode())
@@ -116,6 +116,84 @@ class WalletModelsTestCase(unittest.TestCase):
         self.assertEqual(
             response_message['message'], "Passed the limit!")
         self.assertEqual(response_wallet.status_code, 200)
+
+    def test_purchase_value_greater_than_the_limit_reported_by_user(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        with open('tests/wallet/json/cards.json') as data_file:
+            cards = json.load(data_file)
+            for card in cards:
+                self.client.post(
+                    '/api/v1/card',
+                    data=json.dumps({
+                        "number": cards[card]['number'],
+                        "expiration_date": "2018-07-5",
+                        "validity_date": cards[card]['validity_date'],
+                        "cvv": cards[card]['cvv'],
+                        "limit": cards[card]['limit'],
+                        "wallet_id": 1
+                    }),
+                    headers=headers)
+
+        self.client.put(
+            '/api/v1/wallet',
+            data=json.dumps({
+                "user_limit": 5000
+            }),
+            headers=headers)
+
+        response_buy = self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 6000,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+        response_message = json.loads(response_buy.data.decode())
+
+        self.assertEqual(response_meswsage['message'], 'Purchase value greater than the limit reported by the user!')
+        self.assertEqual(response_buy.status_code, 422)
+
+    def test_purchase_value_greater_than_the_limit(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        with open('tests/wallet/json/cards.json') as data_file:
+            cards = json.load(data_file)
+            for card in cards:
+                self.client.post(
+                    '/api/v1/card',
+                    data=json.dumps({
+                        "number": cards[card]['number'],
+                        "expiration_date": "2018-07-5",
+                        "validity_date": cards[card]['validity_date'],
+                        "cvv": cards[card]['cvv'],
+                        "limit": cards[card]['limit'],
+                        "wallet_id": 1
+                    }),
+                    headers=headers)
+
+        response_buy = self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 15000,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+        response_message = json.loads(response_buy.data.decode())
+
+        self.assertEqual(response_message['message'], 'Purchase value greater than the limit!')
+        self.assertEqual(response_buy.status_code, 422)
+
 
     def test_makes_purchase_with_a_card(self):
         TestHelper().create_user(self.client)
