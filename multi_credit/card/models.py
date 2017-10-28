@@ -9,7 +9,7 @@ class Card(db.Model):
     __table_args__ = (db.UniqueConstraint("number"),)
 
     id = db.Column(db.Integer, primary_key=True)
-    number = db.Column(db.Integer, nullable=False)
+    number = db.Column(db.Integer, nullable=False, index=True)
     expiration_date = db.Column(db.Date, nullable=False)
     validity_date = db.Column(db.Date, nullable=False)
     name = db.Column(db.String(30), nullable=False)
@@ -36,7 +36,7 @@ class Card(db.Model):
         }
 
     def pay_card(self, value_pay, today, date_validate):
-        if today.day > date_validate:
+        if today.day > date_validate.day:
             result = self.pay_with_tax(value_pay)
         else:
             result = self.pay_without_tax(value_pay)
