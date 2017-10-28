@@ -85,6 +85,10 @@ def delete_card(current_user, card_id):
 
     db.session.delete(card)
     db.session.commit()
+
+    wallet.max_limit = Card().sum_cards(wallet.id)
+    db.session.commit()
+
     return jsonify({'message': 'The card has been deleted!'}), 200
 
 

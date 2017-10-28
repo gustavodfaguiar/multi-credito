@@ -2,6 +2,7 @@ from multi_credit import app, db
 import unittest
 import json
 from tests.helpers import TestHelper
+from multi_credit.wallet.models import Wallet
 
 
 class CardModelsTestCase(unittest.TestCase):
@@ -35,7 +36,7 @@ class CardModelsTestCase(unittest.TestCase):
         self.wallet_data = {
             "max_limit": 0,
             "user_limit": 0,
-            "credit": 0,
+            "spent_credit": 0,
             "user_id": 1
         }
 
@@ -60,6 +61,11 @@ class CardModelsTestCase(unittest.TestCase):
             headers=headers)
         result = json.loads(response.data.decode())
 
+        with self.app.app_context():
+            wallet = Wallet.query.filter_by(user_id=1).first()
+
+        self.assertEqual(
+            wallet.max_limit, 2000.00)
         self.assertEqual(
             result['message'], "New card created!")
         self.assertEqual(response.status_code, 201)
@@ -134,6 +140,11 @@ class CardModelsTestCase(unittest.TestCase):
 
         result = json.loads(response.data.decode())
 
+        with self.app.app_context():
+            wallet = Wallet.query.filter_by(user_id=1).first()
+
+        self.assertEqual(
+            wallet.max_limit, 0.0)
         self.assertEqual(
             result['message'], "The card has been deleted!")
         self.assertEqual(response.status_code, 200)
