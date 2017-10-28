@@ -9,6 +9,7 @@ from multi_credit.admin.views import login
 
 app = Flask(__name__)
 app.config.from_object(config('APP_SETTINGS'))
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 @app.route('/')
 def index():
