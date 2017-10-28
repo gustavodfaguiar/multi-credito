@@ -1,1 +1,1 @@
-web: gunicorn run:multi_credit
+web: uwsgi uwsgi.ini

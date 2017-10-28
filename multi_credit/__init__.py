@@ -10,6 +10,10 @@ from multi_credit.admin.views import login
 app = Flask(__name__)
 app.config.from_object(config('APP_SETTINGS'))
 
+@app.route('/')
+def index():
+    return 'Test'
+
 with app.app_context():
     db.init_app(app)
 
