@@ -1,4 +1,4 @@
-import os
+from decouple import config
 from multi_credit.db import db
 from flask import Flask
 from multi_credit.user.views import user
@@ -8,8 +8,7 @@ from multi_credit.admin.views import login
 
 
 app = Flask(__name__)
-app.config.from_object(
-    os.environ.get('APP_SETTINGS', 'multi_credit.config.DevelopmentConfig'))
+app.config.from_object(config('APP_SETTINGS'))
 
 with app.app_context():
     db.init_app(app)
