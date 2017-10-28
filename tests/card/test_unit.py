@@ -20,7 +20,7 @@ class CardUnitModelsTestCase(unittest.TestCase):
         value_pay = 500
         card.credit = 1000
         today = datetime.strptime("2017-09-5", "%Y-%m-%d")
-        date_validate = 10
+        date_validate = datetime.strptime("2017-09-10", "%Y-%m-%d")
         credit = card.pay_card(
             value_pay, today, date_validate)
 
