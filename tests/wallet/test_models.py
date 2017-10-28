@@ -13,13 +13,13 @@ class WalletModelsTestCase(unittest.TestCase):
         self.wallet_data = {
             "max_limit": 0,
             "user_limit": 0,
-            "credit": 0,
+            "spent_credit": 0,
             "user_id": 1
         }
 
         self.wallet_return = {
             "wallet": {
-                "credit": 0,
+                "spent_credit": 0,
                 "id": 1,
                 "max_limit": 0,
                 "user_id": 1,
@@ -156,7 +156,7 @@ class WalletModelsTestCase(unittest.TestCase):
             headers=headers)
         response_message = json.loads(response_buy.data.decode())
 
-        self.assertEqual(response_meswsage['message'], 'Purchase value greater than the limit reported by the user!')
+        self.assertEqual(response_message['message'], 'The user has no credit to make this purchase!')
         self.assertEqual(response_buy.status_code, 422)
 
     def test_purchase_value_greater_than_the_limit(self):
@@ -191,9 +191,8 @@ class WalletModelsTestCase(unittest.TestCase):
             headers=headers)
         response_message = json.loads(response_buy.data.decode())
 
-        self.assertEqual(response_message['message'], 'Purchase value greater than the limit!')
+        self.assertEqual(response_message['message'], 'The user has no credit to make this purchase!')
         self.assertEqual(response_buy.status_code, 422)
-
 
     def test_makes_purchase_with_a_card(self):
         TestHelper().create_user(self.client)
@@ -227,11 +226,15 @@ class WalletModelsTestCase(unittest.TestCase):
             headers=headers)
         response_message = json.loads(response_buy.data.decode())
 
-        self.assertEqual(response_message['message']['credit'], 0.0)
-        self.assertEqual(response_message['message']['number'],
-            cards['card_4']['number'])
-        self.assertEqual(response_buy.status_code, 201)
+        card_buy = [
+            {
+                'credit': 0.0,
+                'number': cards['card_4']['number']
+            }
+        ]
 
+        self.assertEqual(response_message['message'], card_buy)
+        self.assertEqual(response_buy.status_code, 201)
 
     def test_makes_purchase_with_several_cards(self):
         TestHelper().create_user(self.client)
@@ -265,7 +268,7 @@ class WalletModelsTestCase(unittest.TestCase):
             headers=headers)
         response_message = json.loads(response_buy.data.decode())
 
-        asert_equal = [
+        cards_buy = [
             {
                 'credit': 0.0,
                 'number': cards['card_4']['number']
@@ -276,5 +279,5 @@ class WalletModelsTestCase(unittest.TestCase):
             }
         ]
 
-        self.assertEqual(response_message['message'], asert_equal)
+        self.assertEqual(response_message['message'], cards_buy)
         self.assertEqual(response_buy.status_code, 201)

@@ -4,7 +4,6 @@ from multi_credit.wallet.models import Wallet
 from multi_credit.card.models import Card
 from multi_credit.security import token_required
 import datetime
-from operator import attrgetter
 
 
 wallet = Blueprint('wallet', __name__)
@@ -45,10 +44,14 @@ def buy_wallet(current_user):
     wallet = Wallet.query.filter_by(
         user_id=current_user.id).first()
 
-    if wallet.user_limit > 0 and value > wallet.user_limit:
-        return jsonify({'message': 'Purchase value greater than the limit reported by the user!'}), 422
-    elif value > wallet.max_limit:
-        return jsonify({'message': 'Purchase value greater than the limit!'}), 422
+    if wallet.user_limit > 0:
+        available_credit = wallet.user_limit - wallet.spent_credit
+    else:
+        available_credit = wallet.max_limit - wallet.spent_credit
+
+
+    if value > available_credit:
+        return jsonify({'message': 'The user has no credit to make this purchase!'}), 422
 
     cards = []
     days = 10
@@ -63,42 +66,40 @@ def buy_wallet(current_user):
 
     cards = best_cards + worst_cards
 
-    if value <= cards[0]['credit']:
-        card = Card.query.filter_by(id=cards[0]['id']).first()
-        card.credit = cards[0]['credit'] - value
+    sum_credit_cards = sum(card['credit'] for card in cards)
+    list_card_buy = []
+    small_value = value
+    sum_total = 0
+
+    for card in cards:
+
+        small_value -= card['credit']
+        sum_total += card['credit']
+
+        card_update = Card.query.filter_by(id=card['id']).first()
+        if small_value <= 0:
+            card_update.credit = abs(small_value)
+        else:
+            card_update.credit = card_update.credit - card['credit']
+
         try:
             db.session.commit()
+            list_card_buy.append({
+                'credit': card_update.credit,
+                'number': card_update.number
+            })
         except:
             return jsonify({'message': 'Error when buying'})
 
-        return jsonify({
-            'message': {'credit': card.credit, 'number': card.number}
-        }), 201
+        if sum_total >= value:
+            break
+
+    if wallet.user_limit > 0:
+        wallet.spent_credit = abs((wallet.spent_credit + value) - wallet.user_limit)
     else:
-        list_card_buy = []
-        small_value = value
-        sum_total = 0
-        for card in cards:
-
-            small_value -= card['credit']
-            sum_total += card['credit']
-
-            card_update = Card.query.filter_by(id=card['id']).first()
-            if small_value <= 0:
-                card_update.credit = abs(small_value)
-            else:
-                card_update.credit = card_update.credit - card['credit']
-
-            try:
-                db.session.commit()
-                list_card_buy.append({
-                    'credit': card_update.credit,
-                    'number': card_update.number
-                })
-            except:
-                return jsonify({'message': 'Error when buying'})
-
-            if sum_total >= value:
-                break
-
-        return jsonify({'message': list_card_buy}), 201
+        wallet.spent_credit = abs((wallet.spent_credit + value) - wallet.max_limit)
+    db.session.commit()
+    print(list_card_buy)
+    print('-----------------------------------')
+    print(wallet.serialize)
+    return jsonify({'message': list_card_buy}), 201

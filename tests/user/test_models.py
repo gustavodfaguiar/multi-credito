@@ -48,7 +48,7 @@ class UserModelsTestCase(unittest.TestCase):
         headers['x-access-token'] = auth_token['token']
 
         response_get_user = self.client.get(
-            '/api/v1/user/1',
+            '/api/v1/user',
             headers=headers)
 
         self.assertEqual(response_get_user.status_code, 201)
