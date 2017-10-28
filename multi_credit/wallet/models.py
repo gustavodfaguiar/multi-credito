@@ -9,7 +9,7 @@ class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     max_limit = db.Column(db.Float(), nullable=False)
     user_limit = db.Column(db.Float(), nullable=False)
-    credit = db.Column(db.Float(), nullable=False)
+    spent_credit = db.Column(db.Float(), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship("User")
@@ -20,7 +20,7 @@ class Wallet(db.Model):
             'id': self.id,
             'max_limit': self.max_limit,
             'user_limit': self.user_limit,
-            'credit': self.credit,
+            'spent_credit': self.spent_credit,
             'user_id': self.user_id
         }
 
@@ -28,7 +28,7 @@ class Wallet(db.Model):
         new_wallet = Wallet(
             max_limit=0,
             user_limit=0,
-            credit=0,
+            spent_credit=0,
             user_id=user_id
         )
 
@@ -38,8 +38,3 @@ class Wallet(db.Model):
             return True
         except:
             return False
-
-    def buy(self):
-        cards = [card.serialize for card in Card.query.order_by(
-                Card.validity_date.asc(), Card.limit.asc()).filter_by(
-                wallet_id=wallet.id)]
