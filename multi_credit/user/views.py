@@ -10,10 +10,10 @@ user = Blueprint('user', __name__)
 
 
 # GET /user/<int:user_id>
-@user.route('/v1/user/<int:user_id>', methods=['GET'])
+@user.route('/v1/user', methods=['GET'])
 @token_required
-def get_one_user(current_user, user_id):
-    user = User.query.filter_by(id=user_id).first()
+def get_one_user(current_user):
+    user = User.query.filter_by(id=current_user.id).first()
 
     if not user:
         return jsonify({'message': 'No user found!'})
