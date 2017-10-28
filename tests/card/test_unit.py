@@ -19,9 +19,6 @@ class CardUnitModelsTestCase(unittest.TestCase):
         card = Card()
         value_pay = 500
         card.credit = 1000
-        today = datetime.strptime("2017-09-5", "%Y-%m-%d")
-        date_validate = datetime.strptime("2017-09-10", "%Y-%m-%d")
-        credit = card.pay_card(
-            value_pay, today, date_validate)
+        credit = card.pay_card(value_pay)
 
         self.assertEqual(credit, 1500)

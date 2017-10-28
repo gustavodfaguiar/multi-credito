@@ -70,7 +70,6 @@ class CardModelsTestCase(unittest.TestCase):
             result['message'], "New card created!")
         self.assertEqual(response.status_code, 201)
 
-
     def test_get_one_card(self):
         TestHelper().create_user(self.client)
         response_sign_in = TestHelper().sign_in(self.client)
@@ -171,3 +170,40 @@ class CardModelsTestCase(unittest.TestCase):
         self.assertEqual(
             result['message'], "No card found!")
         self.assertEqual(response.status_code, 200)
+
+
+    def test_pay_card(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        self.client.post(
+            '/api/v1/card',
+            data=json.dumps(self.card_data),
+            headers=headers)
+
+        self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 500,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+
+        self.client.put(
+            '/api/v1/card/pay/1',
+            data=json.dumps({
+                'value_pay': 300
+            }),
+            headers=headers)
+
+        response_card = self.client.get(
+            '/api/v1/card/1',
+            headers=headers)
+        response_message = json.loads(response_card.data.decode())
+
+        self.assertEqual(response_message['card']['credit'], 1800.0)
+        self.assertEqual(response_card.status_code, 201)
