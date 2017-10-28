@@ -14,8 +14,8 @@ class Card(db.Model):
     validity_date = db.Column(db.Date, nullable=False)
     name = db.Column(db.String(30), nullable=False)
     cvv = db.Column(db.String(4), nullable=False)
-    limit = db.Column(db.Float(), nullable=False)
-    credit = db.Column(db.Float(), nullable=False)
+    limit = db.Column(db.Float(precision=2), nullable=False)
+    credit = db.Column(db.Float(precision=2), nullable=False)
 
     wallet_id = db.Column(db.Integer, db.ForeignKey('wallet.id'),
         nullable=False)

@@ -7,9 +7,9 @@ class Wallet(db.Model):
     __table_args__ = (db.UniqueConstraint("user_id"),)
 
     id = db.Column(db.Integer, primary_key=True)
-    max_limit = db.Column(db.Float(), nullable=False)
-    user_limit = db.Column(db.Float(), nullable=False)
-    spent_credit = db.Column(db.Float(), nullable=False)
+    max_limit = db.Column(db.Float(precision=2), nullable=False)
+    user_limit = db.Column(db.Float(precision=2), nullable=False)
+    spent_credit = db.Column(db.Float(precision=2), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship("User")
