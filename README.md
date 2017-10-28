@@ -7,6 +7,11 @@
 make run
 ```
 
+### Run Flake8
+```
+make flake8
+```
+
 ### Run tests
 ```
 make test

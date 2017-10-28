@@ -15,6 +15,3 @@ app.register_blueprint(wallet, url_prefix='/api')
 app.register_blueprint(user, url_prefix='/api')
 app.register_blueprint(card, url_prefix='/api')
 app.register_blueprint(login, url_prefix='/api')
-
-with app.app_context():
-    db.init_app(app)

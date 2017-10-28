@@ -5,3 +5,4 @@ multi_credit/multi_credit.db
 multi_credit.egg-info/
 .cache/
 .coverage
+*.pyc
