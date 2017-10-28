@@ -1,1 +1,1 @@
-web: python run.py 0.0.0.0:$PORT
+web: gunicorn run:multi_credit
