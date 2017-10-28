@@ -281,3 +281,62 @@ class WalletModelsTestCase(unittest.TestCase):
 
         self.assertEqual(response_message['message'], cards_buy)
         self.assertEqual(response_buy.status_code, 201)
+
+    def test_purchase_after_payment_of_a_card(self):
+        TestHelper().create_user(self.client)
+        response_sign_in = TestHelper().sign_in(self.client)
+        auth_token = json.loads(response_sign_in.data.decode())
+
+        headers = TestHelper().headers
+        headers['x-access-token'] = auth_token['token']
+
+        self.client.post(
+            '/api/v1/card',
+            data=json.dumps({
+                "number": 51658340178292826,
+                "expiration_date": "2018-07-5",
+                "validity_date": "2017-05-5",
+                "cvv": 408,
+                "limit": 1000,
+                "wallet_id": 1
+            }),
+            headers=headers)
+
+        self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 500,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+
+        self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 300,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+
+        self.client.put(
+            '/api/v1/card/pay/1',
+            data=json.dumps({
+                'value_pay': 300
+            }),
+            headers=headers)
+
+        response_buy = self.client.put(
+            '/api/v1/wallet/buy',
+            data=json.dumps({
+                'value': 400,
+                'date': '2017-05-10'
+            }),
+            headers=headers)
+
+        response_card = self.client.get(
+            '/api/v1/card/1',
+            headers=headers)
+        response_message = json.loads(response_card.data.decode())
+
+        self.assertEqual(response_message['card']['credit'], 100.0)
+        self.assertEqual(response_buy.status_code, 201)
