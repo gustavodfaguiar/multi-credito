@@ -1,4 +1,9 @@
-# Multi-Credit Card Challenge [![Build Status](https://travis-ci.org/gusttavoaguiarr/multi-credito.svg?branch=master)](https://travis-ci.org/gusttavoaguiarr/multi-credito) [![Code Health](https://landscape.io/github/gusttavoaguiarr/multi-credito/master/landscape.svg?style=flat)](https://landscape.io/github/gusttavoaguiarr/multi-credito/master)
+# Multi-Credit Card Challenge
+[![Build Status](https://travis-ci.org/gusttavoaguiarr/multi-credito.svg?branch=master)](https://travis-ci.org/gusttavoaguiarr/multi-credito)
+
+[![Code Health](https://landscape.io/github/gusttavoaguiarr/multi-credito/master/landscape.svg?style=flat)](https://landscape.io/github/gusttavoaguiarr/multi-credito/master)
+
+
 [![codecov](https://codecov.io/gh/gusttavoaguiarr/multi-credito/branch/master/graph/badge.svg)](https://codecov.io/gh/gusttavoaguiarr/multi-credito)
 
 
