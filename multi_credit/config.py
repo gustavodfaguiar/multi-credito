@@ -14,7 +14,8 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = config('DEBUG', default=False, cast=bool)
-    SQLALCHEMY_DATABASE_URI = config('DATABASE_URL')
+    DEFAULT_DATABASE = 'sqlite:///multi_credit.db'
+    SQLALCHEMY_DATABASE_URI = config('DATABASE_URL', default=DEFAULT_DATABASE)
 
 
 class TestingConfig(Config):
