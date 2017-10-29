@@ -9,6 +9,7 @@ env:
     - DATABASE_URL="sqlite:///multi_credit.db"
 install:
   - make install
+  - pip install codecov
 script:
   - make coverage
   - codecov
