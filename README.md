@@ -16,6 +16,26 @@ pip install -r requirements-dev.txt
 cp contrib/env-sample .env
 ```
 
+### Run application
+```
+make run
+```
+
+### Run Flake8
+```
+make flake8
+```
+
+### Run tests
+```
+make test
+```
+
+### Run coverage
+```
+make coverage
+```
+
 ### API Endpoints
 
 #### Parameters Headers
@@ -136,24 +156,4 @@ PUT /api/v1/wallet/buy - Make purchase
 {
     "value": 1000
 }
-```
-
-### Run application
-```
-make run
-```
-
-### Run Flake8
-```
-make flake8
-```
-
-### Run tests
-```
-make test
-```
-
-### Run coverage
-```
-make coverage
 ```
