@@ -16,7 +16,6 @@ class UserModelsTestCase(unittest.TestCase):
     def tearDown(self):
         with self.app.app_context():
             db.drop_all()
-            db.create_all()
 
     def test_create_user(self):
         response = TestHelper().create_user(self.client)
