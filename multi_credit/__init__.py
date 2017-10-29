@@ -8,7 +8,8 @@ from multi_credit.admin.views import login
 
 
 app = Flask(__name__)
-app.config.from_object(config('APP_SETTINGS'))
+DEFAULT_SETTINGS = 'multi_credit.config.DevelopmentConfig'
+app.config.from_object(config('APP_SETTINGS', default=DEFAULT_SETTINGS))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 with app.app_context():

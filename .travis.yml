@@ -7,6 +7,6 @@ env:
     - DEBUG=True
     - APP_SETTINGS="multi_credit.config.TestingConfig"
     - SECRET_KEY="*w_3!@2cn1gy5iddx$d0ubyjrlxft(zw)kkk$w=)t#-r7y^^tq"
-    - DATABASE_URL=sqlite:///multi_credit.db
+    - DATABASE_URL="sqlite:///multi_credit.db"
 script:
   - make test
