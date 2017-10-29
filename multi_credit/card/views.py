@@ -3,7 +3,7 @@ from flask import request, jsonify, Blueprint
 from multi_credit.card.models import Card
 from multi_credit.wallet.models import Wallet
 from multi_credit.security import token_required
-from datetime import date, datetime
+from datetime import datetime
 
 
 card = Blueprint('card', __name__)

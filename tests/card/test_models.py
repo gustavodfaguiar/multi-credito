@@ -171,7 +171,6 @@ class CardModelsTestCase(unittest.TestCase):
             result['message'], "No card found!")
         self.assertEqual(response.status_code, 200)
 
-
     def test_pay_card(self):
         TestHelper().create_user(self.client)
         response_sign_in = TestHelper().sign_in(self.client)

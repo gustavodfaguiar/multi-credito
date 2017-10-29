@@ -17,8 +17,7 @@ class Card(db.Model):
     limit = db.Column(db.Float(precision=2), nullable=False)
     credit = db.Column(db.Float(precision=2), nullable=False)
 
-    wallet_id = db.Column(db.Integer, db.ForeignKey('wallet.id'),
-        nullable=False)
+    wallet_id = db.Column(db.Integer, db.ForeignKey('wallet.id'), nullable=False)
     wallet = db.relationship("Wallet")
 
     @property
@@ -71,7 +70,6 @@ class Card(db.Model):
             card['days'] = difference + 30
 
         return best_cards
-
 
     def worst_cards(self, date_buy, best_date_buy, wallet_id):
         worst_cards = [card.serialize for card in Card.query.order_by(

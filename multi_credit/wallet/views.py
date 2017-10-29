@@ -65,7 +65,6 @@ def buy_wallet(current_user):
 
     cards = best_cards + worst_cards
 
-    sum_credit_cards = sum(card['credit'] for card in cards)
     list_card_buy = []
     small_value = value
     sum_total = 0

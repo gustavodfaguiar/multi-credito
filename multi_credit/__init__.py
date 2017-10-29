@@ -11,10 +11,6 @@ app = Flask(__name__)
 app.config.from_object(config('APP_SETTINGS'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-@app.route('/')
-def index():
-    return 'Test'
-
 with app.app_context():
     db.init_app(app)
 

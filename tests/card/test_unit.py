@@ -1,6 +1,5 @@
 import unittest
 from multi_credit.card.models import Card
-from datetime import datetime
 
 
 class CardUnitModelsTestCase(unittest.TestCase):
