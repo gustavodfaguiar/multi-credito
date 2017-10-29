@@ -1,12 +1,15 @@
 language: python
 python:
   - "3.5"
-install:
-  - make install
 global:
     - DEBUG=True
     - APP_SETTINGS="multi_credit.config.TestingConfig"
     - SECRET_KEY="*w_3!@2cn1gy5iddx$d0ubyjrlxft(zw)kkk$w=)t#-r7y^^tq"
     - DATABASE_URL="sqlite:///multi_credit.db"
+install:
+  - make install
+before_script:
+   - echo "DEBUG=True" >> .env
+   - echo "SECRET_KEY=$SECRET_KEY" >> .env
 script:
   - make test
