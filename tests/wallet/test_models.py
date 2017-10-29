@@ -19,7 +19,7 @@ class WalletModelsTestCase(unittest.TestCase):
 
         self.wallet_return = {
             "wallet": {
-                "spent_credit": 0,
+                "available_credit": 0,
                 "id": 1,
                 "max_limit": 0,
                 "user_id": 1,
