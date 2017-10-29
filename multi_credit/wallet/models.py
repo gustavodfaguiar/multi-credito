@@ -20,9 +20,18 @@ class Wallet(db.Model):
             'id': self.id,
             'max_limit': self.max_limit,
             'user_limit': self.user_limit,
-            'spent_credit': self.spent_credit,
+            'available_credit': self.available_credit,
             'user_id': self.user_id
         }
+
+    @property
+    def available_credit(self):
+        if self.user_limit > 0:
+            value = self.spent_credit - self.user_limit
+        else:
+            value = self.spent_credit - self.max_limit
+
+        return value
 
     def create_wallet(self, user_id):
         new_wallet = Wallet(
