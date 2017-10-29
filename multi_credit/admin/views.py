@@ -3,7 +3,6 @@ from multi_credit.user.models import User
 from werkzeug.security import check_password_hash
 import jwt
 import datetime
-import os
 from decouple import config
 
 
