@@ -1,13 +1,8 @@
 language: python
 python:
   - "3.5"
-env:
-  global:
-    - DEBUG=True
-    - APP_SETTINGS="multi_credit.config.TestingConfig"
-    - SECRET_KEY="*w_3!@2cn1gy5iddx$d0ubyjrlxft(zw)kkk$w=)t#-r7y^^tq"
-    - DATABASE_URL="sqlite:///multi_credit.db"
 install:
+  - cp contrib/env-example .env
   - make install
   - pip install codecov
 script:

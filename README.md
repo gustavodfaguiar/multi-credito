@@ -1,5 +1,6 @@
-# Multi-Credit Card Challenge [![Build Status](https://travis-ci.org/gusttavoaguiarr/multi-credito.svg?branch=master)](https://travis-ci.org/gusttavoaguiarr/multi-credito)[![Code Health](https://landscape.io/github/gusttavoaguiarr/multi-credito/master/landscape.svg?style=flat)](https://landscape.io/github/gusttavoaguiarr/multi-credito/master)[![codecov](https://codecov.io/gh/gusttavoaguiarr/multi-credito/branch/master/graph/badge.svg)](https://codecov.io/gh/gusttavoaguiarr/multi-credito)
+[![Build Status](https://travis-ci.org/gusttavoaguiarr/multi-credito.svg?branch=master)](https://travis-ci.org/gusttavoaguiarr/multi-credito)           [![Code Health](https://landscape.io/github/gusttavoaguiarr/multi-credito/master/landscape.svg?style=flat)](https://landscape.io/github/gusttavoaguiarr/multi-credito/master)    [![codecov](https://codecov.io/gh/gusttavoaguiarr/multi-credito/branch/master/graph/badge.svg)](https://codecov.io/gh/gusttavoaguiarr/multi-credito)
 
+# Multi-Credit Card Challenge
 
 ## Requirements
 * Python 3.5
@@ -11,6 +12,10 @@
 ```
 git clone https://github.com/gusttavoaguiarr/multi-credito multi-credito
 cd multi-credito
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+cp contrib/env-example .env
 ```
 
 ### Run application
