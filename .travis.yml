@@ -3,5 +3,8 @@ python:
   - "3.5"
 install:
   - make install
+env:
+    - DEBUG=True
+    - APP_SETTINGS="multi_credit.config.TestingConfig"
 script:
   - make test
