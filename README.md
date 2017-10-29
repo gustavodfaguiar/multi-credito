@@ -1,4 +1,4 @@
-# Multi-Credit Card Challenge
+# Multi-Credit Card Challenge [![Build Status](https://travis-ci.org/gusttavoaguiarr/multi-credito.svg?branch=master)](https://travis-ci.org/gusttavoaguiarr/multi-credito)
 
 ## Requirements
 * Python 3.5
@@ -10,10 +10,6 @@
 ```
 git clone https://github.com/gusttavoaguiarr/multi-credito multi-credito
 cd multi-credito
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-dev.txt
-cp contrib/env-sample .env
 ```
 
 ### Run application
