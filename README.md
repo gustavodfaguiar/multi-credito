@@ -44,9 +44,7 @@ make coverage
 **To begin, it is necessary to register the information in the header**
 
 ```
-Authorization: Basic Z3VzdGF2b0BnbWFpbC5jb206MTIzNDU2
 Content-Type: application/json
-x-access-token:
 ```
 
 ### Create
@@ -70,7 +68,7 @@ To access the other routes, you must login, done that a token will be generated 
 
 ```
 {
-    token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo"
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MDk0MTczNDZ9.BbgOxJSVYEyRx1BnE8-3v8G7LmBufAL-bc-10lY9yco"
 }
 ```
 
