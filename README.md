@@ -12,16 +12,15 @@
 ```
 git clone https://github.com/gusttavoaguiarr/multi-credito multi-credito
 cd multi-credito
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-dev.txt
-cp contrib/env-example .env
+source setup.sh
 ```
 
 ### Run application
 ```
 make run
 ```
+
+Access: http://localhost:5000/api/v1/login
 
 ### Run Flake8
 ```
@@ -41,20 +40,22 @@ make coverage
 ### API Endpoints
 
 #### Parameters Headers
+
+**To begin, it is necessary to register the information in the header**
+
 ```
 Authorization: Basic Z3VzdGF2b0BnbWFpbC5jb206MTIzNDU2
 Content-Type: application/json
 x-access-token:
 ```
 
-GET /api/v1/login - Sign in
-```
-{
-    token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo"
-}
-```
+### Create
+POST /api/v1/user
 
-POST /api/v1/user - Create user
+To create User, do a `post` HTTP request in `/api/v1/user` endpoint
+
+**Register a user so you can login**
+
 ```
 {
     "email": "user@gmail.com",
@@ -63,9 +64,25 @@ POST /api/v1/user - Create user
 }
 ```
 
+GET /api/v1/login
+
+To access the other routes, you must login, done that a token will be generated and this token must be added to the header
+
+```
+{
+    token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo"
+}
+```
+
 #### Requires authentication
 
-GET /api/v1/user - Get user
+All endpoints are now protected and you must inform in header `x-access-token` header the token. to get token see `/api/v1/login` endpoint
+
+### READ
+GET /api/v1/user
+
+To read User, do a `get` HTTP request in `/api/v1/user` endpoint
+
 ```
 {
     "user": {
@@ -75,8 +92,13 @@ GET /api/v1/user - Get user
     }
 }
 ```
+## Endpoints Card
 
-POST /api/v1/card - Create card
+### CREATE
+POST /api/v1/card
+
+To create Card, do a `post` HTTP request in `/api/v1/card` endpoint
+
 ```
 {
     "number": 5165834017429286,
@@ -87,7 +109,11 @@ POST /api/v1/card - Create card
 }
 ```
 
-GET /api/v1/card/< int: card_id > - Get one card
+### READ
+GET /api/v1/card/< int: card_id >
+
+To read Card, do a `get` HTTP request in `/api/v1/card/< int: card_id >` endpoint
+
 ```
 {
     "card": {
@@ -104,7 +130,11 @@ GET /api/v1/card/< int: card_id > - Get one card
 }
 ```
 
-GET /api/v1/cards - Get all card
+### READ
+GET /api/v1/cards
+
+To read all cards, do a `get` HTTP request in `/api/v1/cards` endpoint
+
 ```
 {
     "cards": [
@@ -123,17 +153,29 @@ GET /api/v1/cards - Get all card
 }
 ```
 
-PUT /api/v1/card/pay/< int: card_id > - Pay card
+### UPDATE
+PUT /api/v1/card/pay/< int: card_id >
+
+To make the payment of the card, do a `put` HTTP request in `/api/v1/card/pay/< int: card_id >` endpoint
+
 ```
 {
    "value_pay": 200
 }
 ```
 
-DELETE /api/v1/card/< int: card_id > - Delete card
+### DELETE
+DELETE /api/v1/card/< int: card_id >
 
+To delete a card, do a `delete` HTTP request in `/api/v1/card/< int: card_id >` endpoint
 
-GET /api/v1/wallet - Get Wallet
+## Endpoints Wallet
+
+### READ
+GET /api/v1/wallet
+
+To read a wallet, do a `get` HTTP request in `/api/v1/wallet` endpoint
+
 ```
 {
     "wallet": {
@@ -146,14 +188,22 @@ GET /api/v1/wallet - Get Wallet
 }
 ```
 
-PUT /api/v1/wallet - Update limit user
+### UPDATE
+PUT /api/v1/wallet
+
+To update the user limit, do a `put` HTTP request in `/api/v1/wallet` endpoint
+
 ```
 {
     "user_limit": 1000
 }
 ```
 
-PUT /api/v1/wallet/buy - Make purchase
+### UPDATE
+PUT /api/v1/wallet/buy
+
+To make a purchase, do a `put` HTTP request in `/api/v1/wallet/buy` endpoint
+
 ```
 {
     "value": 1000
